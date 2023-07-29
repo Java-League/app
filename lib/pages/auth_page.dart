@@ -1,0 +1,52 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:java_league/components/auth_form.dart';
+import 'package:java_league/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
+
+class AuthPage extends StatelessWidget {
+  const AuthPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primaryContainer,
+                  Theme.of(context).colorScheme.secondaryContainer,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight
+              ),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  themeProvider.isDark() ? 'assets/images/java_league_logo_black.png' : 'assets/images/java_league_logo_white.png',
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  fit: BoxFit.fitWidth,
+                ),
+                const SizedBox(height: 24),
+                AuthForm(),
+                const SizedBox(height: 24),
+                ElevatedButton(onPressed: () {
+                  themeProvider.toggleTheme();
+                }, child: Text('Trocar Tema'))
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
