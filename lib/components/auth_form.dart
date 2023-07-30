@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:java_league/models/auth.dart';
+import 'package:java_league/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 enum AuthMode { signup, login }
@@ -44,7 +44,7 @@ class _AuthFormState extends State<AuthForm> {
     setState(() => _isLoading = true);
 
     _formKey.currentState?.save();
-    Auth auth = Provider.of(context, listen: false);
+    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
 
     if (_isLogin()) {
       // Login

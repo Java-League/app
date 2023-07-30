@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:java_league/models/auth.dart';
-import 'package:java_league/pages/auth_page.dart';
+import 'package:java_league/pages/auth_or_home_page.dart';
+import 'package:java_league/providers/auth_provider.dart';
 import 'package:java_league/providers/theme_provider.dart';
 import 'package:java_league/utils/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           create: (_) => ThemeProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => Auth(),
+          create: (_) => AuthProvider(),
         ),
       ],
       child: Consumer<ThemeProvider>(
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           title: 'Flutter Demo',
           theme: themeProvider.getThemeData(),
           routes: {
-            AppRoutes.auth: (ctx) => const AuthPage(),
+            AppRoutes.AUTH_OR_HOME: (ctx) => const AuthOrHomePage(),
           },
           debugShowCheckedModeBanner: false,
         ),
