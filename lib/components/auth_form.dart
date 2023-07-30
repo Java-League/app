@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:java_league/models/auth.dart';
+import 'package:provider/provider.dart';
+
+enum AuthMode { signup, login }
 
 class AuthForm extends StatefulWidget {
   const AuthForm({Key? key}) : super(key: key);
@@ -8,14 +12,55 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
-  // final _formKey = Global
-  Map<String, String> _authData = {
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  AuthMode _authMode = AuthMode.login;
+  final Map<String, String> _authData = {
     'login': '',
-    'senha': ''
+    'password': '',
   };
 
-  void _submit () {
+  bool _isLogin() => _authMode == AuthMode.login;
+  bool _isSignup() => _authMode == AuthMode.signup;
 
+  void _switchAuthMode() {
+    setState(() {
+      if (_isLogin()) {
+        _authMode = AuthMode.signup;
+      } else {
+        _authMode = AuthMode.login;
+      }
+    });
+  }
+
+  Future<void> _submit() async {
+    final isValid = _formKey.currentState?.validate() ?? false;
+
+    if (!isValid) {
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    _formKey.currentState?.save();
+    Auth auth = Provider.of(context, listen: false);
+
+    if (_isLogin()) {
+      // Login
+      await auth.login(
+        _authData['login']!,
+        _authData['password']!,
+      );
+    } else {
+      // Registrar
+      await auth.register(
+        _authData['login']!,
+        _authData['password']!,
+      );
+    }
+
+    setState(() => _isLoading = false);
   }
 
   @override
@@ -23,6 +68,7 @@ class _AuthFormState extends State<AuthForm> {
     return Container(
       padding: EdgeInsets.all(24),
       child: Form(
+        key: _formKey,
         child: Column(
           children: [
             TextFormField(
@@ -41,6 +87,7 @@ class _AuthFormState extends State<AuthForm> {
             ),
             const SizedBox(height: 8),
             TextFormField(
+              controller: _passwordController,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.lock_outline),
                 labelText: 'Senha',
@@ -55,8 +102,42 @@ class _AuthFormState extends State<AuthForm> {
               },
               obscureText: true,
             ),
+            const SizedBox(height: 8),
+            if (_isSignup())
+              TextFormField(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.lock_outline),
+                  labelText: 'Confirmar Senhar',
+                ),
+                keyboardType: TextInputType.emailAddress,
+                obscureText: true,
+                validator: _isLogin()
+                    ? null
+                    : (_password) {
+                  final password = _password ?? '';
+                  if (password != _passwordController.text) {
+                    return 'Senhas informadas não conferem.';
+                  }
+                  return null;
+                },
+              ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: () { _submit(); }, child: Text('Entrar'))
+            if (_isLoading)
+              CircularProgressIndicator()
+            else
+              ElevatedButton(
+                onPressed: _submit,
+                child: Text(
+                  _authMode == AuthMode.login ? 'Entrar' : 'Registrar',
+                ),
+              ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: _switchAuthMode,
+              child: Text(
+                _isLogin() ? 'Criar conta?' : 'Fazer Login?',
+              ),
+            ),
           ],
         ),
       ),

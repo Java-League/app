@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:java_league/models/auth.dart';
 import 'package:java_league/pages/auth_page.dart';
 import 'package:java_league/providers/theme_provider.dart';
 import 'package:java_league/utils/app_routes.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Auth(),
         ),
       ],
       child: Consumer<ThemeProvider>(
