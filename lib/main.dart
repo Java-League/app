@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/pages/auth_or_home_page.dart';
 import 'package:java_league/providers/auth_provider.dart';
+import 'package:java_league/providers/jogador_provider.dart';
 import 'package:java_league/providers/theme_provider.dart';
 import 'package:java_league/utils/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +18,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ThemeProvider(),
+          create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, JogadorProvider>(
+          create: (_) => JogadorProvider('', []),
+          update: (ctx, auth, previous) {
+            return JogadorProvider(
+              auth.token ?? '',
+              previous?.items ?? [],
+            );
+          },
         ),
         ChangeNotifierProvider(
-          create: (_) => AuthProvider(),
+          create: (_) => ThemeProvider(),
         ),
       ],
       child: Consumer<ThemeProvider>(

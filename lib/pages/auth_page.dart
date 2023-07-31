@@ -15,8 +15,8 @@ class AuthPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-                Theme.of(context).colorScheme.primaryContainer,
                 Theme.of(context).colorScheme.secondaryContainer,
+                Theme.of(context).colorScheme.primaryContainer,
               ], begin: Alignment.topLeft, end: Alignment.bottomRight),
             ),
           ),

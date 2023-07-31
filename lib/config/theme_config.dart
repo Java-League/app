@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+// https://m3.material.io/theme-builder#/custom
+// Primary    HUE 230
+// Secondary  HUE 180
+// Tertiary   HUE 290
+
 class ThemeConfig {
   static const ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,
