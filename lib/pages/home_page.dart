@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/components/player_list.dart';
 import 'package:java_league/providers/jogador_provider.dart';
+import 'package:java_league/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 enum FilterOptions {
@@ -34,9 +35,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
         elevation: 0,
         title: const Text('Home Page'),
         actions: [
@@ -62,6 +64,7 @@ class _HomePageState extends State<HomePage> {
               });
             },
           ),
+          IconButton(onPressed: () => themeProvider.toggleTheme(), icon: themeProvider.isDark() ? Icon(Icons.light_mode) : Icon(Icons.dark_mode))
         ],
       ),
       body: _isLoading
@@ -70,10 +73,11 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Theme.of(context).colorScheme.secondaryContainer,
-                      Theme.of(context).colorScheme.primaryContainer,
-                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                    color: Theme.of(context).colorScheme.background,
+                    // gradient: LinearGradient(colors: [
+                    //   Theme.of(context).colorScheme.secondaryContainer,
+                    //   Theme.of(context).colorScheme.primaryContainer,
+                    // ], begin: Alignment.topLeft, end: Alignment.bottomRight),
                   ),
                 ),
                 PlayerList(_showFavoriteOnly),

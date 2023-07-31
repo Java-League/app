@@ -49,6 +49,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> register(String login, String password) async {
+    storage.delete(key: '_token');
     final uri = Uri.parse('${RestJavaLeague.serverApiUrl}/auth/register');
     final response = await RestJavaLeague.http.post(
       uri,

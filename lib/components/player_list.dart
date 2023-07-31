@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:java_league/components/player_grid_item.dart';
+import 'package:java_league/components/player_list_item.dart';
 import 'package:java_league/models/jogadores.dart';
 import 'package:java_league/providers/jogador_provider.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +16,10 @@ class PlayerList extends StatelessWidget {
         showFavoriteOnly ? provider.favoriteItems : provider.items;
 
     return ListView.builder(
-      padding: const EdgeInsets.all(10),
       itemCount: loadedProducts.length,
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: loadedProducts[i],
-        child: const PlayerGridItem(),
+        child: PlayerListItem(),
       ),
     );
   }

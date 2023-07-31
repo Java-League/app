@@ -39,10 +39,11 @@ class AuthPage extends StatelessWidget {
                       const AuthForm(),
                       const SizedBox(height: 24),
                       ElevatedButton(
-                          onPressed: () {
-                            themeProvider.toggleTheme();
-                          },
-                          child: const Text('Trocar Tema'))
+                        onPressed: () {
+                          themeProvider.toggleTheme();
+                        },
+                        child: const Text('Trocar Tema'),
+                      )
                     ],
                   ),
                 ),

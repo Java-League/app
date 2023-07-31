@@ -79,6 +79,11 @@ class ThemeConfig {
       useMaterial3: true,
       colorScheme: lightColorScheme,
       fontFamily: 'Lato',
+      dividerTheme: DividerThemeData(
+          color: lightColorScheme.surfaceVariant,
+          thickness: 1,
+          space: 1
+      ),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(color: lightColorScheme.onBackground),
         filled: true,
@@ -124,6 +129,11 @@ class ThemeConfig {
       useMaterial3: true,
       colorScheme: darkColorScheme,
       fontFamily: 'Lato',
+      dividerTheme: DividerThemeData(
+        color: darkColorScheme.surfaceVariant,
+        thickness: 1,
+        space: 1
+      ),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(color: darkColorScheme.onBackground),
         filled: true,
