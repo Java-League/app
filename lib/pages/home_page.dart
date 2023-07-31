@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:java_league/components/player_grid.dart';
+import 'package:java_league/components/player_list.dart';
 import 'package:java_league/providers/jogador_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +36,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        elevation: 0,
         title: const Text('Home Page'),
         actions: [
           PopupMenuButton(
@@ -64,8 +66,19 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : PlayerGrid(_showFavoriteOnly),
-      // drawer: const AppDrawer(),
+          : Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Theme.of(context).colorScheme.secondaryContainer,
+                      Theme.of(context).colorScheme.primaryContainer,
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  ),
+                ),
+                PlayerList(_showFavoriteOnly),
+              ],
+            ),
     );
   }
 }

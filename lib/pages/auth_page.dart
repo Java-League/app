@@ -31,7 +31,7 @@ class AuthPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
-                        themeProvider.isDark() ? 'assets/images/java_league_logo_black.png' : 'assets/images/java_league_logo_white.png',
+                        themeProvider.isDark() ? 'assets/images/java_league_logo_white.png' : 'assets/images/java_league_logo_black.png',
                         width: MediaQuery.of(context).size.width * 0.45,
                         fit: BoxFit.fitWidth,
                       ),

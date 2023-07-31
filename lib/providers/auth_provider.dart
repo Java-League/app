@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:java_league/config/rest_config.dart';
 import 'package:java_league/models/auth.dart';
 
 class AuthProvider with ChangeNotifier {
+  final storage = const FlutterSecureStorage(aOptions: AndroidOptions(encryptedSharedPreferences: true));
+
   String? _token;
   int? _id;
   double? javalis;
@@ -34,10 +37,11 @@ class AuthProvider with ChangeNotifier {
     final response = await RestJavaLeague.http.post(
       uri,
       body: jsonEncode({'login': login, 'password': password}),
-      headers: RestJavaLeague.headers,
     );
     final responseData = json.decode(utf8.decode(response.bodyBytes));
     final Auth auth = Auth.fromJson(responseData);
+
+    storage.write(key: '_token', value: auth.idToken);
     _token = auth.idToken;
     notifyListeners();
     print(auth.idToken);
@@ -49,7 +53,6 @@ class AuthProvider with ChangeNotifier {
     final response = await RestJavaLeague.http.post(
       uri,
       body: jsonEncode({'login': login, 'password': password, 'role': 'ADMIN'}),
-      headers: RestJavaLeague.headers,
     );
     print(jsonDecode(response.body));
   }

@@ -92,7 +92,7 @@ class _AuthFormState extends State<AuthForm> {
                 prefixIcon: Icon(Icons.lock_outline),
                 labelText: 'Senha',
               ),
-              onSaved: (senha) => _authData['senha'] = senha ?? '',
+              onSaved: (senha) => _authData['password'] = senha ?? '',
               validator: (_password) {
                 final password = _password ?? '';
                 if (password.isEmpty || password.length < 5) {

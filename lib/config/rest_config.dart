@@ -6,9 +6,6 @@ import 'package:http_interceptor/http_interceptor.dart';
 class RestJavaLeague {
 
   static const String HEADER_TOTAL = 'x-total-count';
-  static const headers = <String, String>{
-    'Content-Type': 'application/json;charset=UTF-8',
-  };
 
   static String get serverApiUrl {
     //   return 'https://javaleague.com.br/api';
