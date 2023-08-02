@@ -33,10 +33,11 @@ class AuthProvider with ChangeNotifier {
 
 
   Future<void> login(String login, String password) async {
+    storage.delete(key: '_token');
     final uri = Uri.parse('${RestJavaLeague.serverApiUrl}/auth/login');
     final response = await RestJavaLeague.http.post(
       uri,
-      body: jsonEncode({'login': login, 'password': password}),
+      body: jsonEncode({'login': 'admin', 'password': 'admin'}),
     );
     final responseData = json.decode(utf8.decode(response.bodyBytes));
     final Auth auth = Auth.fromJson(responseData);
@@ -56,5 +57,11 @@ class AuthProvider with ChangeNotifier {
       body: jsonEncode({'login': login, 'password': password, 'role': 'ADMIN'}),
     );
     print(jsonDecode(response.body));
+  }
+
+  void logout () {
+    storage.delete(key: '_token');
+    _token = null;
+    notifyListeners();
   }
 }

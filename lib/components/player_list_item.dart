@@ -12,17 +12,14 @@ class PlayerListItem extends StatelessWidget {
     final player = Provider.of<Jogador>(context, listen: false);
 
     return ExpansionTile(
-      shape: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.background, width: 1)),
-      collapsedShape: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surfaceVariant, width: 1)),
+      shape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
+      collapsedShape: UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
       textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
       collapsedTextColor: Theme.of(context).colorScheme.onBackground,
-      collapsedBackgroundColor: Theme.of(context).colorScheme.background,
       leading: CircleAvatar(
         backgroundImage: NetworkImage(player.imageUrl),
         backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
-      trailing: Overall(overall: player.overall),
       title: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
@@ -35,10 +32,10 @@ class PlayerListItem extends StatelessWidget {
                 Text('Lance Atual   ${FormatterJavaLeague.formatarJavalis(player.price)}'),
               ],
             ),
+            Overall(overall: player.overall)
           ],
         ),
       ),
-      // trailing: Overall(overall: player.overall),
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
