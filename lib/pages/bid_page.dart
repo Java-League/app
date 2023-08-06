@@ -16,7 +16,6 @@ class BidPage extends StatefulWidget {
 }
 
 class _BidPageState extends State<BidPage> {
-  bool _showFavoriteOnly = false;
   bool _isLoading = true;
 
   @override
@@ -36,6 +35,6 @@ class _BidPageState extends State<BidPage> {
   Widget build(BuildContext context) {
       return _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : PlayerList(_showFavoriteOnly);
+          : PlayerList();
   }
 }

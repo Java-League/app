@@ -8,8 +8,11 @@ class RestJavaLeague {
   static const String HEADER_TOTAL = 'x-total-count';
 
   static String get serverApiUrl {
-    //   return 'https://javaleague.com.br/api';
     return 'http://192.168.18.6:8080';
+  }
+
+  static String get serverApiWs {
+    return 'ws://192.168.18.6:8080/ws';
   }
 
   static InterceptedClient? _http;
@@ -36,6 +39,8 @@ class TokenInterceptor implements InterceptorContract {
     }
 
     data.headers["Content-Type"] = "application/json;charset=UTF-8";
+    // data.headers["X-AUTH-TOKEN"] = "2596e66a-f055-489d-8ea1-946ed7d6b696";
+    // data.headers["accept"] = "application/json";
     // data.headers["Origin"] = "https://app.facilite.co";
     if (token != null) {
       data.headers["Authorization"] = "Bearer $token";

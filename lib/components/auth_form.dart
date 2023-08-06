@@ -77,13 +77,13 @@ class _AuthFormState extends State<AuthForm> {
                 labelText: 'Login',
               ),
               onSaved: (login) => _authData['login'] = login ?? '',
-              validator: (_login) {
-                final login = _login ?? '';
-                if (login.isEmpty || login.length < 5) {
-                  return 'Informe um login válida';
-                }
-                return null;
-              },
+              // validator: (_login) {
+              //   final login = _login ?? '';
+              //   if (login.isEmpty || login.length < 5) {
+              //     return 'Informe um login válida';
+              //   }
+              //   return null;
+              // },
             ),
             const SizedBox(height: 8),
             TextFormField(
@@ -93,13 +93,13 @@ class _AuthFormState extends State<AuthForm> {
                 labelText: 'Senha',
               ),
               onSaved: (senha) => _authData['password'] = senha ?? '',
-              validator: (_password) {
-                final password = _password ?? '';
-                if (password.isEmpty || password.length < 5) {
-                  return 'Informe uma senha válida';
-                }
-                return null;
-              },
+              // validator: (_password) {
+              //   final password = _password ?? '';
+              //   if (password.isEmpty || password.length < 5) {
+              //     return 'Informe uma senha válida';
+              //   }
+              //   return null;
+              // },
               obscureText: true,
             ),
             const SizedBox(height: 8),

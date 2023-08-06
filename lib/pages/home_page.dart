@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
@@ -48,20 +47,9 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            Theme.of(context).colorScheme.primaryContainer,
-            Theme.of(context).colorScheme.secondaryContainer,
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-        ),
-        child: _pages(context)[_selectedIndex],
-      ),
+      body:  _pages(context)[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-        elevation: 0,
+        elevation: 7,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.feed),
@@ -128,7 +116,7 @@ class DrawerWidget extends StatelessWidget {
             accountName: Text('Real Madrid FC', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer)),
             accountEmail: Text('Técnico: Yan Willian', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer)),
             currentAccountPicture: const CircleAvatar(
-              backgroundImage: NetworkImage('https://cdn.sofifa.net/meta/team/3468/120.png'),
+              // backgroundImage: NetworkImage('https://cdn.sofifa.net/meta/team/3468/120.png'),
               backgroundColor: Colors.transparent,
             ),
             decoration: BoxDecoration(

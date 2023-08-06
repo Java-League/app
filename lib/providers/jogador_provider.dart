@@ -2,17 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:java_league/config/rest_config.dart';
-import 'package:java_league/models/jogadores.dart';
+import 'package:java_league/models/player.dart';
 
 class JogadorProvider with ChangeNotifier {
- final String _token;
- List<Jogador> _jogadores = [];
+ List<Player> _jogadores = [];
 
- List<Jogador> get items => [..._jogadores];
- List<Jogador> get favoriteItems =>
-     _jogadores.where((jogador) => jogador.isFavorite).toList();
+ List<Player> get items => [..._jogadores];
 
- JogadorProvider(this._token, this._jogadores);
+ JogadorProvider(this._jogadores);
 
  int get itemsCount {
   return _jogadores.length;
@@ -21,14 +18,13 @@ class JogadorProvider with ChangeNotifier {
  Future<void> loadPlayers() async {
   _jogadores.clear();
 
-  final uri = Uri.parse('${RestJavaLeague.serverApiUrl}/player');
+  final uri = Uri.parse('${RestJavaLeague.serverApiUrl}/api/player');
   final response = await RestJavaLeague.http.get(uri);
   if (response.body == 'null') return;
 
   List<dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
 
-  _jogadores = List<Jogador>.from(responseData.map((model)=> Jogador.fromJson(model)));
+  _jogadores = List<Player>.from(responseData.map((model)=> Player.fromJson(model)));
   notifyListeners();
  }
-
 }

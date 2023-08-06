@@ -8,7 +8,6 @@ class Overall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color backgroundColor;
-    Color textColor;
 
     if (overall > 80) {
       backgroundColor = const Color.fromRGBO(12, 133, 57, 1);

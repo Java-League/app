@@ -3,6 +3,7 @@ import 'package:java_league/pages/auth_or_home_page.dart';
 import 'package:java_league/providers/auth_provider.dart';
 import 'package:java_league/providers/jogador_provider.dart';
 import 'package:java_league/providers/theme_provider.dart';
+import 'package:java_league/providers/web_socket_provider.dart';
 import 'package:java_league/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +21,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => WebSocketProvider(),
+        ),
         ChangeNotifierProxyProvider<AuthProvider, JogadorProvider>(
-          create: (_) => JogadorProvider('', []),
+          create: (_) => JogadorProvider([]),
           update: (ctx, auth, previous) {
             return JogadorProvider(
-              auth.token ?? '',
               previous?.items ?? [],
             );
           },
