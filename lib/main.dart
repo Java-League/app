@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/pages/auth_or_home_page.dart';
 import 'package:java_league/providers/auth_provider.dart';
-import 'package:java_league/providers/jogador_provider.dart';
+import 'package:java_league/providers/player_provider.dart';
 import 'package:java_league/providers/theme_provider.dart';
 import 'package:java_league/providers/web_socket_provider.dart';
 import 'package:java_league/utils/app_routes.dart';
@@ -24,11 +24,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => WebSocketProvider(),
         ),
-        ChangeNotifierProxyProvider<AuthProvider, JogadorProvider>(
-          create: (_) => JogadorProvider([]),
+        ChangeNotifierProxyProvider<AuthProvider, PlayerProvider>(
+          create: (_) => PlayerProvider([]),
           update: (ctx, auth, previous) {
-            return JogadorProvider(
-              previous?.items ?? [],
+            return PlayerProvider(
+              previous?.players ?? [],
             );
           },
         ),

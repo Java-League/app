@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class FormatterJavaLeague {
-  static String formatarJavalis(double? campo) {
+  static String formatarJavalis(int? campo) {
     if (campo == null) {
       return '0.0';
     }

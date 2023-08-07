@@ -1,33 +1,33 @@
 class Bid {
-  final int? id;
-  final double bidValue;
-  final DateTime? date;
-  final int userId;
-  final int playerId;
+  int? id;
+  int value;
+  DateTime? date;
+  int? teamId;
+  int playerId;
 
   Bid({
     this.id,
-    required this.bidValue,
+    required this.value,
     this.date,
-    required this.userId,
+    this.teamId,
     required this.playerId,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'bidValue': bidValue,
+      'value': value,
       'date': date,
-      'userId': userId,
+      'teamId': teamId,
       'playerId': playerId,
     };
   }
 
   factory Bid.fromJson(Map<String, dynamic> json) => Bid(
     id: json["id"],
-    bidValue: json["bidValue"],
+    value: json["value"],
     date: json["date"] == null ? null : DateTime.parse(json["date"]),
-    userId: json["userId"],
+    teamId: json["teamId"],
     playerId: json["playerId"],
   );
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/components/player_list.dart';
-import 'package:java_league/providers/jogador_provider.dart';
+import 'package:java_league/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
 enum FilterOptions {
@@ -21,7 +21,7 @@ class _BidPageState extends State<BidPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<JogadorProvider>(
+    Provider.of<PlayerProvider>(
       context,
       listen: false,
     ).loadPlayers().then((value) {

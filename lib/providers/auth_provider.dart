@@ -4,13 +4,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:java_league/config/rest_config.dart';
 import 'package:java_league/models/auth.dart';
+import 'package:java_league/models/team.dart';
+import 'package:java_league/services/team_service.dart';
 
 class AuthProvider with ChangeNotifier {
   final storage = const FlutterSecureStorage(aOptions: AndroidOptions(encryptedSharedPreferences: true));
 
   String? _token;
-  int? _id;
-  double? javalis;
+  int? _teamId;
+  Team? _team;
 
   bool get isAuth {
     return _token != null;
@@ -20,17 +22,20 @@ class AuthProvider with ChangeNotifier {
     return isAuth ? _token : null;
   }
 
-  // Auth responseData = await account.authenticate(email, password);
-  // _token = responseData.idToken;
-  // _username = email;
-  // try {
-  // storage.write(key: '_token', value: _token!);
-  // storage.write(key: '_username', value: email);
-  // storage.write(key: '_usernameKey', value: password);
-  // } catch (e) {
-  // // do nothing
-  // }
+  int get teamId {
+    return _teamId ?? 0;
+  }
 
+  Team? get team {
+    return _team;
+  }
+
+  void getCurrentTeam() {
+    TeamService().getTeam().then((value) {
+      _team = value;
+      notifyListeners();
+    });
+  }
 
   Future<void> login(String login, String password) async {
     storage.delete(key: '_token');
@@ -44,9 +49,9 @@ class AuthProvider with ChangeNotifier {
 
     storage.write(key: '_token', value: auth.idToken);
     _token = auth.idToken;
+    _teamId = auth.teamId;
     notifyListeners();
     print(auth.idToken);
-    // return Auth.fromJson(responseData);
   }
 
   Future<void> register(String login, String password) async {
@@ -59,7 +64,7 @@ class AuthProvider with ChangeNotifier {
     print(jsonDecode(response.body));
   }
 
-  void logout () {
+  void logout() {
     storage.delete(key: '_token');
     _token = null;
     notifyListeners();

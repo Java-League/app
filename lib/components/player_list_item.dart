@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/components/overall.dart';
-import 'package:java_league/models/bid.dart';
 import 'package:java_league/models/player.dart';
+import 'package:java_league/providers/auth_provider.dart';
 import 'package:java_league/providers/theme_provider.dart';
 import 'package:java_league/services/bid_service.dart';
 import 'package:java_league/utils/formatter.dart';
@@ -18,38 +18,34 @@ class PlayerListItem extends StatefulWidget {
 }
 
 class _PlayerListItemState extends State<PlayerListItem> {
-  final BidService _bidService = BidService();
-  bool _isExpanded = false;
-
-
+  final BidService _playerService = BidService();
   int _currentPrice = 0;
-  int _minimumPrice = 0;
 
   @override
   void initState() {
     super.initState();
     _currentPrice = widget.player.price.toInt();
-    _minimumPrice = widget.player.price.toInt();
   }
 
   void _handleDecreasePrice() {
     setState(() {
-      _currentPrice = _currentPrice - 250;
-      if (_currentPrice < _minimumPrice) {
-        _currentPrice = _minimumPrice;
+      _currentPrice = _currentPrice - 100;
+      if (_currentPrice < widget.player.price) {
+        _currentPrice = widget.player.price;
       }
     });
   }
 
-  void _handleIncreasePrice(int amount) {
+  void _handleIncreasePrice() {
     setState(() {
-      _currentPrice = _currentPrice + amount;
+      _currentPrice = _currentPrice + 100;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 300),
       crossFadeState: !widget.isUpdated ? CrossFadeState.showFirst : CrossFadeState.showSecond,
@@ -73,66 +69,86 @@ class _PlayerListItemState extends State<PlayerListItem> {
         ),
         elevation: 3,
         child: ExpansionTile(
-          initiallyExpanded: false,
           shape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
           collapsedShape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
           textColor: Theme.of(context).colorScheme.onSurfaceVariant,
           collapsedTextColor: Theme.of(context).colorScheme.onBackground,
-          onExpansionChanged: (val) => setState(() {
-            _isExpanded = val;
-          }),
           // leading: CircleAvatar(
-          //   backgroundImage: NetworkImage(player.imageUrl),
+          //   backgroundImage: NetworkImage(widget.player.imageUrl),
           //   backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
           // ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Overall(overall: widget.player.overall),
-            ],
-          ),
+          trailing: Overall(overall: widget.player.overall),
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(widget.player.imageUrl),
+                          backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 12),
                         Text(widget.player.name),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    Badge(
+                      label: const Text('Vencendo'),
+                      backgroundColor: Colors.green,
+                      textColor: Colors.black,
+                      isLabelVisible: authProvider.teamId == widget.player.teamId,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [Text('Tempo Restante', style: TextStyle(fontSize: 14)), Text('3 Minutos', style: TextStyle(fontSize: 18))],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [Text('Tempo Restante', style: TextStyle(fontSize: 14)), Text('3 Minutos', style: TextStyle(fontSize: 18))],
-                        ),
-                        const SizedBox(width: 32),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Text('Lance Atual', style: TextStyle(fontSize: 14)),
+                        Row(
                           children: [
-                            Text('Lance Atual', style: TextStyle(fontSize: 14)),
-                            Row(
-                              children: [
-                                Image.asset(
-                                  themeProvider.isDark() ? 'assets/images/java_white.png' : 'assets/images/java_black.png',
-                                  width: 24,
-                                  fit: BoxFit.fitWidth,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(FormatterJavaLeague.formatarJavalis(widget.player.price), style: TextStyle(fontSize: 18)),
-                              ],
-                            )
+                            Image.asset(
+                              themeProvider.isDark() ? 'assets/images/java_white.png' : 'assets/images/java_black.png',
+                              width: 24,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(FormatterJavaLeague.formatarJavalis(widget.player.price), style: TextStyle(fontSize: 18)),
                           ],
-                        ),
+                        )
                       ],
                     ),
+                    authProvider.teamId == widget.player.teamId ?
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text('Meu Limite', style: TextStyle(fontSize: 14)),
+                        Row(
+                          children: [
+                            Image.asset(
+                              themeProvider.isDark() ? 'assets/images/java_white.png' : 'assets/images/java_black.png',
+                              width: 24,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            const SizedBox(width: 4),
+                            Text('0.0', style: TextStyle(fontSize: 18)),
+                          ],
+                        )
+                      ],
+                    ) : const SizedBox(height: 0),
                   ],
                 ),
               ],
@@ -140,7 +156,7 @@ class _PlayerListItemState extends State<PlayerListItem> {
           ),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
+            authProvider.teamId != widget.player.teamId ? Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Column(
                 children: [
@@ -151,7 +167,7 @@ class _PlayerListItemState extends State<PlayerListItem> {
                       children: [
                         IconButton(
                           color: Theme.of(context).colorScheme.onSecondaryContainer,
-                          onPressed: _currentPrice > _minimumPrice ? _handleDecreasePrice : null,
+                          onPressed: _currentPrice > widget.player.price ? _handleDecreasePrice : null,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                           ),
@@ -171,7 +187,7 @@ class _PlayerListItemState extends State<PlayerListItem> {
                         ),
                         IconButton(
                           color: Theme.of(context).colorScheme.onSecondaryContainer,
-                          onPressed: () => _handleIncreasePrice(250),
+                          onPressed: _handleIncreasePrice,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                           ),
@@ -185,9 +201,9 @@ class _PlayerListItemState extends State<PlayerListItem> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: _currentPrice > _minimumPrice ? () {
-                            _bidService.bid(Bid(bidValue: _currentPrice.toDouble(), userId: 1, playerId: widget.player.id));
-
+                          onPressed: _currentPrice > widget.player.price ? () {
+                            // Provider.of<WebSocketProvider>(context, listen: false).sendBid(Bid(value: _currentPrice, playerId: widget.player.id));
+                            _playerService.bid(widget.player.id, _currentPrice);
                           } : null ,
                           child: const Text('Dar Lance'),
                         ),
@@ -217,7 +233,7 @@ class _PlayerListItemState extends State<PlayerListItem> {
                   ),
                 ],
               ),
-            ),
+            ) : const SizedBox(height: 0),
           ],
         ),
       ),

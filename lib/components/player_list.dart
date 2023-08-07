@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/components/player_list_item.dart';
 import 'package:java_league/models/player.dart';
-import 'package:java_league/providers/jogador_provider.dart';
+import 'package:java_league/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/web_socket_provider.dart';
@@ -15,7 +15,7 @@ class PlayerList extends StatefulWidget {
 }
 
 class _PlayerListState extends State<PlayerList> {
-  List<Player> loadedProducts = [];
+  List<Player> loadedPlayers = [];
   int? _updatedPlayerId;
   bool _isPlayerUpdated = false;
 
@@ -29,49 +29,52 @@ class _PlayerListState extends State<PlayerList> {
     webSocketProvider.messageStream.listen((snapshot) {
       if (snapshot != null) {
         final updatedPlayerId = snapshot['playerId'];
-        final updatedPlayerPrice = snapshot['bidValue'];
+        final updatedPlayerPrice = snapshot['newPrice'];
 
         // Encontre o player na lista e atualize seu preço.
-        final updatedPlayerIndex = loadedProducts.indexWhere((player) => player.id == updatedPlayerId);
+        final updatedPlayerIndex = loadedPlayers.indexWhere((player) => player.id == updatedPlayerId);
         if (updatedPlayerIndex != -1) {
-          setState(() {
-            loadedProducts[updatedPlayerIndex].price = updatedPlayerPrice;
-            _updatedPlayerId = updatedPlayerId;
-            _isPlayerUpdated = true;
-          });
-
-          Future.delayed(Duration(seconds: 3), () {
+          if (mounted) {
             setState(() {
-              _isPlayerUpdated = false;
+              loadedPlayers[updatedPlayerIndex].price = updatedPlayerPrice;
+              _updatedPlayerId = updatedPlayerId;
+              _isPlayerUpdated = true;
             });
-          });
+
+            Future.delayed(Duration(seconds: 3), () {
+              if (mounted) {
+                setState(() {
+                  _isPlayerUpdated = false;
+                });
+              }
+            });
+          }
         }
       }
     });
   }
 
   @override
-  void dispose() {
-    final webSocketProvider = Provider.of<WebSocketProvider>(context, listen: false);
-    webSocketProvider.closeConnection();
-    super.dispose();
+  void deactivate() {
+    Provider.of<WebSocketProvider>(context, listen: false).closeConnection();
+    super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<JogadorProvider>(context);
-    loadedProducts = provider.items;
+    final provider = Provider.of<PlayerProvider>(context);
+    loadedPlayers = provider.players;
 
     return ListView.builder(
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        final player = loadedProducts[index];
+        final player = loadedPlayers[index];
         return PlayerListItem(
           player,
           isUpdated: player.id == _updatedPlayerId && _isPlayerUpdated,
         );
       },
-      itemCount: loadedProducts.length,
+      itemCount: loadedPlayers.length,
     );
   }
 }

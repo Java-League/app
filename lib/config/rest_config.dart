@@ -8,11 +8,11 @@ class RestJavaLeague {
   static const String HEADER_TOTAL = 'x-total-count';
 
   static String get serverApiUrl {
-    return 'http://192.168.18.6:8080';
+    return 'http://192.168.2.11:8080';
   }
 
   static String get serverApiWs {
-    return 'ws://192.168.18.6:8080/ws';
+    return 'ws://192.168.2.11:8080/ws';
   }
 
   static InterceptedClient? _http;

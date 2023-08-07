@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/pages/bid_page.dart';
+import 'package:java_league/pages/select_team.dart';
 import 'package:java_league/providers/auth_provider.dart';
 import 'package:java_league/providers/theme_provider.dart';
+import 'package:java_league/utils/formatter.dart';
 import 'package:provider/provider.dart';
-
-enum FilterOptions {
-  favorite,
-  all,
-}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,32 +19,47 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AuthProvider>(context, listen: false).getCurrentTeam();
   }
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
+    if (authProvider.team == null) {
+      return const SelectTeam();
+    }
     return Scaffold(
       drawer: DrawerWidget(),
       appBar: AppBar(
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.person),
+            icon: CircleAvatar(child: Image.network(authProvider.team!.emblem, width: 32)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text('Real Madrid FC'),
-            Text(
-              'J\$ 25.000',
-              style: TextStyle(fontSize: 18),
+          children: [
+            Text(authProvider.team!.name),
+            Row(
+              children: [
+                Image.asset(
+                  themeProvider.isDark() ? 'assets/images/java_white.png' : 'assets/images/java_black.png',
+                  width: 24,
+                  fit: BoxFit.fitWidth,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  FormatterJavaLeague.formatarJavalis(authProvider.team!.javalis),
+                  style: TextStyle(fontSize: 18),
+                ),
+              ],
             ),
           ],
         ),
       ),
-      body:  _pages(context)[_selectedIndex],
+      body: _pages(context)[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 7,
         items: const <BottomNavigationBarItem>[
@@ -108,30 +120,29 @@ class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('Real Madrid FC', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer)),
+            accountName: Text(authProvider.team!.name, style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer)),
             accountEmail: Text('Técnico: Yan Willian', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer)),
-            currentAccountPicture: const CircleAvatar(
-              // backgroundImage: NetworkImage('https://cdn.sofifa.net/meta/team/3468/120.png'),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(authProvider.team!.emblem),
               backgroundColor: Colors.transparent,
             ),
             decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Theme.of(context).colorScheme.primaryContainer,
-                  Theme.of(context).colorScheme.secondaryContainer,
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+              gradient: LinearGradient(colors: [
+                Theme.of(context).colorScheme.primaryContainer,
+                Theme.of(context).colorScheme.secondaryContainer,
+              ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
             ),
           ),
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
-            onTap: () {
-
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: Icon(Icons.store),
@@ -158,10 +169,11 @@ class DrawerWidget extends StatelessWidget {
             },
           ),
           ListTile(
-            title: IconButton(
-              onPressed: () => themeProvider.toggleTheme(),
-              icon: themeProvider.isDark() ? const Icon(Icons.light_mode) : const Icon(Icons.dark_mode),
-            ),
+            leading: themeProvider.isDark() ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode),
+            title: Text('Alterar Tema'),
+            onTap: () {
+              themeProvider.toggleTheme();
+            },
           ),
           ListTile(
             leading: Icon(Icons.logout),
@@ -171,6 +183,15 @@ class DrawerWidget extends StatelessWidget {
               Provider.of<AuthProvider>(context, listen: false).logout();
             },
           ),
+          ListTile(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(authProvider.team!.uniform1),
+                Image.network(authProvider.team!.uniform2),
+              ],
+            ),
+          )
         ],
       ),
     );

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:java_league/config/rest_config.dart';
 import 'package:java_league/models/bid.dart';
@@ -44,9 +44,7 @@ class WebSocketProvider extends ChangeNotifier {
       destination: destination,
       callback: (frame) {
         if (frame.body != null) {
-          print('frame.body');
           Map<String, dynamic> result = jsonDecode(frame.body!);
-          print('result');
           _messageStreamController.add(result);
         }
       },
