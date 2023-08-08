@@ -17,12 +17,12 @@ class _SelectTeamState extends State<SelectTeam> {
 
   @override
   void initState() {
-    TeamService().getAllTeamsAvailable().then((value) {
-      setState(() {
-        teams = value;
-      });
-    });
     super.initState();
+    // TeamService().getAllTeamsAvailable().then((value) {
+    //   setState(() {
+    //     teams = value;
+    //   });
+    // });
   }
 
   @override

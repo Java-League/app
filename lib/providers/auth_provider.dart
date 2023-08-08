@@ -31,18 +31,21 @@ class AuthProvider with ChangeNotifier {
   }
 
   void getCurrentTeam() {
-    TeamService().getTeam().then((value) {
-      _team = value;
-      notifyListeners();
-    });
+    if (_teamId != null && _teamId != 0) {
+      TeamService().getTeam().then((value) {
+        _team = value;
+        notifyListeners();
+      });
+    }
   }
 
   Future<void> login(String login, String password) async {
     storage.delete(key: '_token');
+    reset();
     final uri = Uri.parse('${RestJavaLeague.serverApiUrl}/auth/login');
     final response = await RestJavaLeague.http.post(
       uri,
-      body: jsonEncode({'login': 'admin', 'password': 'admin'}),
+      body: jsonEncode({'login': login, 'password': password}),
     );
     final responseData = json.decode(utf8.decode(response.bodyBytes));
     final Auth auth = Auth.fromJson(responseData);
@@ -56,6 +59,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> register(String login, String password) async {
     storage.delete(key: '_token');
+    reset();
     final uri = Uri.parse('${RestJavaLeague.serverApiUrl}/auth/register');
     final response = await RestJavaLeague.http.post(
       uri,
@@ -66,7 +70,13 @@ class AuthProvider with ChangeNotifier {
 
   void logout() {
     storage.delete(key: '_token');
-    _token = null;
+    reset();
     notifyListeners();
+  }
+
+  void reset() {
+    _token = null;
+    _team = null;
+    _teamId = null;
   }
 }

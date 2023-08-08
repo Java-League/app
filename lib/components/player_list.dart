@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../providers/web_socket_provider.dart';
 
 class PlayerList extends StatefulWidget {
-
   const PlayerList({Key? key}) : super(key: key);
 
   @override
@@ -16,8 +15,6 @@ class PlayerList extends StatefulWidget {
 
 class _PlayerListState extends State<PlayerList> {
   List<Player> loadedPlayers = [];
-  int? _updatedPlayerId;
-  bool _isPlayerUpdated = false;
 
   @override
   void initState() {
@@ -30,23 +27,18 @@ class _PlayerListState extends State<PlayerList> {
       if (snapshot != null) {
         final updatedPlayerId = snapshot['playerId'];
         final updatedPlayerPrice = snapshot['newPrice'];
+        final teamIdHighest = snapshot['teamIdHighest'];
+        final teamIdLowest = snapshot['teamIdLowest'];
+        final message = snapshot['message'];
+        final priceLimit = snapshot['priceLimit'];
 
         // Encontre o player na lista e atualize seu preço.
         final updatedPlayerIndex = loadedPlayers.indexWhere((player) => player.id == updatedPlayerId);
         if (updatedPlayerIndex != -1) {
           if (mounted) {
             setState(() {
-              loadedPlayers[updatedPlayerIndex].price = updatedPlayerPrice;
-              _updatedPlayerId = updatedPlayerId;
-              _isPlayerUpdated = true;
-            });
-
-            Future.delayed(Duration(seconds: 3), () {
-              if (mounted) {
-                setState(() {
-                  _isPlayerUpdated = false;
-                });
-              }
+              loadedPlayers[updatedPlayerIndex].hasBidForTeam = true;
+              loadedPlayers[updatedPlayerIndex].thisUpdated(updatedPlayerPrice, teamIdHighest, teamIdLowest ?? 0, message, priceLimit);
             });
           }
         }
@@ -67,14 +59,11 @@ class _PlayerListState extends State<PlayerList> {
 
     return ListView.builder(
       shrinkWrap: true,
-      itemBuilder: (context, index) {
-        final player = loadedPlayers[index];
-        return PlayerListItem(
-          player,
-          isUpdated: player.id == _updatedPlayerId && _isPlayerUpdated,
-        );
-      },
       itemCount: loadedPlayers.length,
+      itemBuilder: (context, index) => ChangeNotifierProvider.value(
+        value: loadedPlayers[index],
+        child: PlayerListItem(),
+      ),
     );
   }
 }

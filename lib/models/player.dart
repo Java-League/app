@@ -6,7 +6,13 @@ class Player with ChangeNotifier{
   int overall;
   int price;
   String imageUrl;
-  int? teamId;
+  int? priceLimit;
+  int teamId = 0;
+  bool hasBidForTeam = false;
+
+  int teamIdLow = 0;
+  bool isUpdated = false;
+  String message = '';
 
   Player({
     required this.id,
@@ -14,8 +20,26 @@ class Player with ChangeNotifier{
     required this.overall,
     required this.price,
     required this.imageUrl,
-    this.teamId,
+    this.priceLimit,
+    required this.teamId,
+    required this.hasBidForTeam,
   });
+
+  void thisUpdated(int newValue, int teamIdHighest, int teamIdLowest, String messageApi, int? priceLimit) {
+    if (priceLimit != null) this.priceLimit = priceLimit;
+    isUpdated = true;
+    price = newValue;
+    teamId = teamIdHighest;
+    teamIdLow = teamIdLowest;
+    message = messageApi;
+    notifyListeners();
+    Future.delayed(const Duration(seconds: 5), () {
+      isUpdated = false;
+      message = '';
+      teamIdLow = 0;
+      notifyListeners();
+    });
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -34,6 +58,8 @@ class Player with ChangeNotifier{
     overall: json["overall"],
     price: json["price"],
     imageUrl: json["imageUrl"],
-    teamId: json["teamId"],
+    priceLimit: json["priceLimit"],
+    teamId: json["teamId"] ?? 0,
+    hasBidForTeam: json["hasBidForTeam"],
   );
 }
