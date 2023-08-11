@@ -121,6 +121,12 @@ class ThemeConfig {
           ),
         ),
       ),
+      expansionTileTheme: ExpansionTileThemeData(
+        shape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
+        collapsedShape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
+        textColor: lightColorScheme.onSurfaceVariant,
+        collapsedTextColor: lightColorScheme.onBackground,
+      ),
     );
   }
 
@@ -171,6 +177,12 @@ class ThemeConfig {
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
         ),
+      ),
+      expansionTileTheme: ExpansionTileThemeData(
+        shape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
+        collapsedShape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
+        textColor: darkColorScheme.onSurfaceVariant,
+        collapsedTextColor: darkColorScheme.onBackground,
       ),
     );
   }

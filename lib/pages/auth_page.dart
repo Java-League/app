@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:java_league/components/auth_form.dart';
+import 'package:java_league/components/gradiente_background.dart';
 import 'package:java_league/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,14 +13,7 @@ class AuthPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Theme.of(context).colorScheme.secondaryContainer,
-                Theme.of(context).colorScheme.primaryContainer,
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-            ),
-          ),
+          const GradientBrackground(),
           Center(
             child: SingleChildScrollView(
               reverse: true,

@@ -52,14 +52,6 @@ class _PlayerListItemState extends State<PlayerListItem> {
         ),
         elevation: 3,
         child: ExpansionTile(
-          shape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
-          collapsedShape: const UnderlineInputBorder(borderSide: BorderSide(color: Colors.transparent, width: 1)),
-          textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-          collapsedTextColor: Theme.of(context).colorScheme.onBackground,
-          // leading: CircleAvatar(
-          //   backgroundImage: NetworkImage(player.imageUrl),
-          //   backgroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
-          // ),
           trailing: Overall(overall: player.overall),
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),

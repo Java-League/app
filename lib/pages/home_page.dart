@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:java_league/components/gradiente_background.dart';
 import 'package:java_league/pages/bid_page.dart';
+import 'package:java_league/pages/feed_page.dart';
+import 'package:java_league/pages/team_page.dart';
 import 'package:java_league/pages/select_team.dart';
 import 'package:java_league/providers/auth_provider.dart';
 import 'package:java_league/providers/theme_provider.dart';
@@ -32,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       drawer: DrawerWidget(),
       appBar: AppBar(
+        flexibleSpace: const GradientBrackground(),
         leading: Builder(
           builder: (context) => IconButton(
             icon: CircleAvatar(child: Image.network(authProvider.team!.emblem, width: 32)),
@@ -90,29 +94,9 @@ class _HomePageState extends State<HomePage> {
 
 List<Widget> _pages(BuildContext context) {
   return [
-    SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // FeedBid()
-            Text('Lances')
-          ],
-        ),
-      ),
-    ),
-    BidPage(),
-    SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // FeedBid()
-            Text('Meu Time')
-          ],
-        ),
-      ),
-    ),
+    const FeedPage(),
+    const BidPage(),
+    const TeamPage(),
   ];
 }
 
